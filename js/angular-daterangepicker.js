@@ -37,7 +37,7 @@
         };
         el = $(element);
         customOpts = $scope.opts;
-        opts = _mergeOpts({}, dateRangePickerConfig, customOpts);
+        opts = _mergeOpts({}, angular.copy(dateRangePickerConfig), customOpts);
         _picker = null;
         _clear = function() {
           _picker.setStartDate();
@@ -90,7 +90,7 @@
           };
           if (opts.singleDatePicker && objValue) {
             return f(objValue);
-          } else if (objValue.startDate) {
+          } else if (objValue && objValue.startDate) {
             return [f(objValue.startDate), f(objValue.endDate)].join(opts.locale.separator);
           } else {
             return '';
@@ -172,10 +172,10 @@
         _initBoundaryField('min', _validateMin, 'startDate', 'minDate');
         _initBoundaryField('max', _validateMax, 'endDate', 'maxDate');
         if (attrs.options) {
-          $scope.$watch('opts', function(newOpts) {
+          $scope.$watchCollection('opts', function(newOpts) {
             opts = _mergeOpts(opts, newOpts);
             return _init();
-          }, true);
+          });
         }
         if (attrs.clearable) {
           $scope.$watch('clearable', function(newClearable) {
